@@ -7,6 +7,7 @@ const TelegramBot = require("node-telegram-bot-api");
 const userDetailsLogger = require("./utils/userDetailsLogger");
 const removeSpecialChars = require("./utils/removeSpecialChars");
 const checkFileSize = require("./utils/checkFileSize");
+const getThumb = require("./utils/getThumb");
 
 dotenv.config({ path: "./config.env" });
 
@@ -46,8 +47,17 @@ bot.on("message", msg => {
           scdl
             .getInfo(url)
             .then(fileInfo => {
-              const filename = `${removeSpecialChars(fileInfo.title)}.mp3`;
+              const filename = `${removeSpecialChars(
+                fileInfo.title
+              )}_${chatId}.mp3`;
+              const thumbPath = path.join(
+                process.cwd(),
+                "downloads",
+                `${removeSpecialChars(fileInfo.title)}_${chatId}.jpg`
+              );
               const filepath = path.join(process.cwd(), "downloads", filename);
+              getThumb(fileInfo.artwork_url, thumbPath);
+
               console.log("Downloading...");
               bot.sendMessage(chatId, "Downloading...");
               scdl
@@ -69,6 +79,7 @@ bot.on("message", msg => {
                           {
                             caption:
                               "\nID: @soundcloud_download_bot\nYoutube Video To Audio Bot: @yt_video_to_audio_bot",
+                            thumb: thumbPath,
                           },
                           fileOptions
                         )
@@ -81,6 +92,7 @@ bot.on("message", msg => {
                         })
                         .finally(() => {
                           fs.unlinkSync(filepath);
+                          fs.unlinkSync(thumbPath);
                         });
                     })
                   );

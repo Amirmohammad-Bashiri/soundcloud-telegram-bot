@@ -16,6 +16,8 @@
   "dependencies": {
     "dotenv": "^10.0.0",
     "node-telegram-bot-api": "^0.54.0",
+    "request": "^2.88.2",
+    "sharp": "^0.29.1",
     "soundcloud-downloader": "^1.0.0"
   }
 }
