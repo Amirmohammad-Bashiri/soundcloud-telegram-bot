@@ -68,7 +68,7 @@ bot.on("message", msg => {
                           filepath,
                           {
                             caption:
-                              "\nID: @soundcloud_download_bot\nYoutube Video To Audio Bot:\n ID: @yt_video_to_audio_bot",
+                              "\nID: @soundcloud_download_bot\nYoutube Video To Audio Bot: @yt_video_to_audio_bot",
                           },
                           fileOptions
                         )
