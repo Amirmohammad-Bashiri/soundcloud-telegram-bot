@@ -66,7 +66,10 @@ bot.on("message", msg => {
                         .sendAudio(
                           chatId,
                           filepath,
-                          { caption: "\nID: @soundcloud_download_bot" },
+                          {
+                            caption:
+                              "\nID: @soundcloud_download_bot\nYoutube Video To Audio Bot:\n ID: @yt_video_to_audio_bot",
+                          },
                           fileOptions
                         )
                         .then(() => {
