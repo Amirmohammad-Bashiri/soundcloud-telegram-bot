@@ -5,6 +5,7 @@ const dotenv = require("dotenv");
 const TelegramBot = require("node-telegram-bot-api");
 
 const userDetailsLogger = require("./utils/userDetailsLogger");
+const removeSpecialChars = require("./utils/removeSpecialChars");
 const checkFileSize = require("./utils/checkFileSize");
 
 dotenv.config({ path: "./config.env" });
@@ -45,7 +46,7 @@ bot.on("message", msg => {
           scdl
             .getInfo(url)
             .then(fileInfo => {
-              const filename = `${fileInfo.title}.mp3`;
+              const filename = `${removeSpecialChars(fileInfo.title)}.mp3`;
               const filepath = path.join(process.cwd(), "downloads", filename);
               console.log("Downloading...");
               bot.sendMessage(chatId, "Downloading...");
@@ -54,11 +55,11 @@ bot.on("message", msg => {
                 .then(stream => {
                   stream.pipe(
                     fs.createWriteStream(filepath).on("close", () => {
-                      // if (!checkFileSize(filepath)) {
-                      //   bot.sendMessage(chatId, "File is too large.");
-                      //   fs.unlinkSync(filepath);
-                      //   return;
-                      // }
+                      if (!checkFileSize(filepath)) {
+                        bot.sendMessage(chatId, "File is too large.");
+                        fs.unlinkSync(filepath);
+                        return;
+                      }
                       console.log("Uploading...");
                       bot.sendMessage(chatId, "Uploading...");
                       bot
