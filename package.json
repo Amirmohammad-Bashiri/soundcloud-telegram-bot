@@ -1,0 +1,21 @@
+{
+  "name": "soundcloud-downloader",
+  "version": "1.0.0",
+  "description": "Telegram soundcloud downloader bot",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [
+    "soundcloud",
+    "telegram",
+    "bot"
+  ],
+  "author": "Amirmohammad Bashiri",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "node-telegram-bot-api": "^0.54.0",
+    "soundcloud-downloader": "^1.0.0"
+  }
+}
