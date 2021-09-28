@@ -54,11 +54,11 @@ bot.on("message", msg => {
                 .then(stream => {
                   stream.pipe(
                     fs.createWriteStream(filepath).on("close", () => {
-                      if (!checkFileSize(filepath)) {
-                        bot.sendMessage(chatId, "File is too large.");
-                        fs.unlinkSync(filepath);
-                        return;
-                      }
+                      // if (!checkFileSize(filepath)) {
+                      //   bot.sendMessage(chatId, "File is too large.");
+                      //   fs.unlinkSync(filepath);
+                      //   return;
+                      // }
                       console.log("Uploading...");
                       bot.sendMessage(chatId, "Uploading...");
                       bot
