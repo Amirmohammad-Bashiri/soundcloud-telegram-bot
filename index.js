@@ -4,6 +4,9 @@ const scdl = require("soundcloud-downloader").default;
 const dotenv = require("dotenv");
 const TelegramBot = require("node-telegram-bot-api");
 
+const userDetailsLogger = require("./utils/userDetailsLogger");
+const checkFileSize = require("./utils/checkFileSize");
+
 dotenv.config({ path: "./config.env" });
 
 const dir = "./downloads";
@@ -26,6 +29,8 @@ bot.on("message", msg => {
 
   try {
     if (msg.text !== "/start") {
+      userDetailsLogger(bot, chatId);
+
       const SOUNDCLOUD_URL = msg.text;
 
       scdl
@@ -49,6 +54,11 @@ bot.on("message", msg => {
                 .then(stream => {
                   stream.pipe(
                     fs.createWriteStream(filepath).on("close", () => {
+                      if (!checkFileSize(filepath)) {
+                        bot.sendMessage(chatId, "File is too large.");
+                        fs.unlinkSync(filepath);
+                        return;
+                      }
                       console.log("Uploading...");
                       bot.sendMessage(chatId, "Uploading...");
                       bot
