@@ -8,6 +8,7 @@ const userDetailsLogger = require("./utils/userDetailsLogger");
 const removeSpecialChars = require("./utils/removeSpecialChars");
 const checkFileSize = require("./utils/checkFileSize");
 const getThumb = require("./utils/getThumb");
+const urlExtractor = require("./utils/urlExtractor");
 
 dotenv.config({ path: "./config.env" });
 
@@ -33,7 +34,9 @@ bot.on("message", msg => {
     if (msg.text !== "/start") {
       userDetailsLogger(bot, chatId);
 
-      const SOUNDCLOUD_URL = msg.text;
+      const url = urlExtractor(msg);
+
+      const SOUNDCLOUD_URL = url;
 
       scdl
         .prepareURL(SOUNDCLOUD_URL)
