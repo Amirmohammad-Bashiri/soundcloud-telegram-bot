@@ -3,7 +3,6 @@ const fs = require("fs");
 const scdl = require("soundcloud-downloader").default;
 
 const removeSpecialChars = require("./utils/removeSpecialChars");
-const checkFileSize = require("./utils/checkFileSize");
 const getThumb = require("./utils/getThumb");
 
 function singleDownload(SOUNDCLOUD_URL, bot, chatId, fileOptions) {
@@ -37,11 +36,6 @@ function singleDownload(SOUNDCLOUD_URL, bot, chatId, fileOptions) {
             .then(stream => {
               stream.pipe(
                 fs.createWriteStream(filepath).on("close", () => {
-                  if (!checkFileSize(filepath)) {
-                    bot.sendMessage(chatId, "File is too large.");
-                    fs.unlinkSync(filepath);
-                    return;
-                  }
                   console.log("Uploading...");
                   bot.sendMessage(chatId, "Uploading...");
                   bot
@@ -79,15 +73,15 @@ function singleDownload(SOUNDCLOUD_URL, bot, chatId, fileOptions) {
         })
         .catch(error => {
           console.error(error);
-          bot.sendMessage(
-            chatId,
-            "Could not get audio info, Please try again later."
-          );
+          bot.sendMessage(chatId, error.message);
         });
     })
     .catch(error => {
       console.error(error);
-      bot.sendMessage(chatId, "Please enter a valid Soundcloud URL");
+      bot.sendMessage(
+        chatId,
+        "Failed to get track info, Please try again later."
+      );
     });
 }
 
