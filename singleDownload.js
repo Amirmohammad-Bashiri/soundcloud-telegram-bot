@@ -1,9 +1,12 @@
 const path = require("path");
 const fs = require("fs");
 const scdl = require("soundcloud-downloader").default;
+const dotenv = require("dotenv");
 
 const removeSpecialChars = require("./utils/removeSpecialChars");
 const getThumb = require("./utils/getThumb");
+
+dotenv.config({ path: "./config.env" });
 
 function singleDownload(SOUNDCLOUD_URL, bot, chatId, fileOptions) {
   scdl
@@ -16,7 +19,7 @@ function singleDownload(SOUNDCLOUD_URL, bot, chatId, fileOptions) {
       console.log("Getting audio info...");
       bot.sendMessage(chatId, "Getting audio info...");
       scdl
-        .getInfo(url)
+        .getInfo(url, process.env.CLIENT_ID)
         .then(fileInfo => {
           const filename = `${removeSpecialChars(
             fileInfo.title
@@ -32,7 +35,7 @@ function singleDownload(SOUNDCLOUD_URL, bot, chatId, fileOptions) {
           console.log("Downloading...");
           bot.sendMessage(chatId, "Downloading...");
           scdl
-            .download(url)
+            .download(url, process.env.CLIENT_ID)
             .then(stream => {
               stream.pipe(
                 fs.createWriteStream(filepath).on("close", () => {
